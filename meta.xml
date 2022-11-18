@@ -1,0 +1,13 @@
+<meta>
+	<info author="BurakMrx" name="İş Yeri Sistemi" version="1"/>
+	<script src="c_WorkplaceSystem.lua" type="client"/>
+    <script src="s_WorkplaceSystem.lua" type="server"/>
+	<file src="files/veriler/Font13.ttf"/>
+	<file src="files/resimler/giyim.png"/>
+	<file src="files/resimler/kurum.png"/>
+	<file src="files/resimler/market.png"/>
+	<file src="files/resimler/restorant.png"/>
+	<file src="files/resimler/sirket.png"/>
+                  <file src="files/resimler/taslak.png"/>
+</meta>
+<!-- DEVELOPMENT BY BURAKMRX -->
