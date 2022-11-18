@@ -276,6 +276,24 @@ addEventHandler("onDgsMouseClickUp",getRootElement(),function()
     if source == yonetimgirisbtn then
         triggerServerEvent("WorkPlaceSystem:LoginMyWorkPlace",localPlayer,id)
     end
+    if source == yonetimsatiligacikartbtn then
+        local miktar = dgsGetText(yonetimkiraliksatiliktxt)
+        if dgsGetText(yonetimsatiligacikartbtn) == "Satılığa Çıkart" then
+            dgsSetText(yonetimsatiligacikartbtn,"Satışı İptal Et")
+        else
+            dgsSetText(yonetimsatiligacikartbtn,"Satılığa Çıkart")
+        end
+        triggerServerEvent("WorkPlaceSystem:SatiligaCikar",localPlayer,id,miktar)
+    end
+    if source == yonetimkiraligacikartbtn then
+        local miktar = dgsGetText(yonetimkiraliksatiliktxt)
+        if dgsGetText(yonetimkiraligacikartbtn) == "Kiralığa Çıkart" then
+            dgsSetText(yonetimsatiligacikartbtn,"Kirayı İptal Et")
+        else
+            dgsSetText(yonetimsatiligacikartbtn,"Kiralığa Çıkart")
+        end
+        triggerServerEvent("WorkPlaceSystem:KiraligaCikar",localPlayer,id,miktar)
+    end
 end)
 
 addEvent("WorkPlaceSystem:AdminPanel",true)
@@ -309,13 +327,24 @@ addEventHandler("WorkPlaceSystem:GirisEkrani",getRootElement(),function(veriler)
         dgsSetText(girissahiblbl,"➥ İşyeri Sahibi: "..tostring(v["sahip"]))
         dgsSetText(girisdurumlbl,"➥ İşyeri Durumu: "..tostring(v["durum"]))
         dgsSetText(giristurulbl,"➥ İşyeri Türü: "..tostring(v["turu"]))
-        dgsSetText(girisfiyatlbl,"➥ İşyeri Fiyatı: "..tostring(v["fiyati"]))
+        if v["durum"] == "Kiralık" then
+        dgsSetText(girisfiyatlbl,"➥ İşyeri Kiralama Fiyatı: "..tostring(v["fiyati"]))
+        else
+            dgsSetText(girisfiyatlbl,"➥ İşyeri Satış Fiyatı: "..tostring(v["fiyati"]))
+        end
         dgsSetText(giriscalismasaatlerilbl,"➥ Çalışma Saatleri: "..tostring(v["saat"]))
         id = tonumber(v["id"])
         if v["kilit"] == 0 then
         dgsSetText(yonetimkilitbtn,"Kilit: Kilitli")
         else
             dgsSetText(yonetimkilitbtn,"Kilit: Kilitsiz")
+        end
+        if v["durum"] == "Satılık" then
+            dgsSetText(yonetimsatiligacikartbtn,"Satışı İptal Et")
+        elseif v["durum"] == "Satılık Değil" then
+            dgsSetVisible(yonetimsatiligacikartbtn,"Satılığa Çıkart")
+        elseif v["durum"] == "Kiralık" then
+            dgsSetVisible(yonetimkiraligacikartbtn,"Kirayı İptal Et")
         end
         dgsSetVisible(giriswindow,true)
         showCursor(true)

@@ -489,3 +489,84 @@ addEventHandler("WorkPlaceSystem:LoginMyWorkPlace",getRootElement(),function(id)
         setAccountData(hesapas,"WorkPlaceSystem:Giris","false")
     end,2000,1,client,t)
 end)
+
+addEvent("WorkPlaceSystem:SatiligaCikar",true)
+addEventHandler("WorkPlaceSystem:SatiligaCikar",getRootElement(),function(id,miktar)
+    local results = dbPoll(dbQuery(db,"SELECT * FROM veriler"),-1)
+    local durum
+    local sahibi
+    for i,v in pairs(results) do
+        if tostring(v["id"]) == tostring(id) then
+            durum = tostring(v["durum"])
+            sahibi = tostring(v["sahip"])
+        end
+    end
+    if tostring(durum) == "Satılık" then
+        dbExec(db,"UPDATE veriler SET durum = ? WHERE id = ?","Faaliyette",id)
+        outputChatBox("#ff7f00● #ffffffBaşarıyla Satılıktan çıkardınız!",source,255,255,255,true)
+        outputChatBox("#ff7f00● #ffffffİşyeri Durumu: #ff7f00"..tostring(durum),source,255,255,255,true)
+        triggerClientEvent(source,"WorkPlaceSystem:PaneliKapat2",source)
+    elseif (durum) == "Satılık Değil" then
+        if tonumber(miktar) >= 100 then  
+            if tostring(sahibi) == tostring(getAccountName(getPlayerAccount(source))) then
+                dbExec(db,"UPDATE veriler SET durum = ?, fiyati = ? WHERE id = ?","Satılık",tostring(miktar),id)
+                outputChatBox("#ff7f00● #ffffffBaşarıyla Satışa çıkardınız!",source,255,255,255,true)
+                outputChatBox("#ff7f00● #ffffffİşyeri Durumu: #ff7f00Satılık",source,255,255,255,true)
+                outputChatBox("#ff7f00● #ffffffİşyeri Fiyatı: #ff7f00"..tostring(miktar),source,255,255,255,true)
+                triggerClientEvent(source,"WorkPlaceSystem:PaneliKapat2",source)
+            else
+                outputChatBox("#FF0000[BİLGİLENDİRME] #ffffffSatılığa Çıkarma başarısız. Sadece işyeri sahibi satılığa çıkarabilir.",source,255,255,255,true)
+                triggerClientEvent(source,"WorkPlaceSystem:PaneliKapat2",source)
+            end
+        else
+            outputChatBox("#FF0000[BİLGİLENDİRME] #ffffffSatılığa Çıkarma başarısız. En az 100 birime satabilirsiniz.",source,255,255,255,true)
+        end
+    else
+        if tonumber(miktar) >= 100 then  
+            if tostring(sahibi) == tostring(getAccountName(getPlayerAccount(source))) then
+                dbExec(db,"UPDATE veriler SET durum = ?, fiyati = ? WHERE id = ?","Satılık",tostring(miktar),id)
+                outputChatBox("#ff7f00● #ffffffBaşarıyla Satışa çıkardınız!",source,255,255,255,true)
+                outputChatBox("#ff7f00● #ffffffİşyeri Durumu: #ff7f00Satılık",source,255,255,255,true)
+                outputChatBox("#ff7f00● #ffffffİşyeri Fiyatı: #ff7f00"..tostring(miktar),source,255,255,255,true)
+                triggerClientEvent(source,"WorkPlaceSystem:PaneliKapat2",source)
+            else
+                outputChatBox("#FF0000[BİLGİLENDİRME] #ffffffSatılığa Çıkarma başarısız. Sadece işyeri sahibi satılığa çıkarabilir.",source,255,255,255,true)
+                triggerClientEvent(source,"WorkPlaceSystem:PaneliKapat2",source)
+            end
+        else
+            outputChatBox("#FF0000[BİLGİLENDİRME] #ffffffSatılığa Çıkarma başarısız. En az 100 birime satabilirsiniz.",source,255,255,255,true)
+        end
+    end
+end)
+
+addEvent("WorkPlaceSystem:KiraligaCikar",true)
+addEventHandler("WorkPlaceSystem:KiraligaCikar",getRootElement(),function(id,miktar)
+    local veri = dbPoll(dbQuery(db,"SELECT * FROM veriler"),-1)
+    local durums
+    local sahibi
+    for i,v in pairs(veri) do
+        if tostring(v["id"]) == tostring(id) then
+            sahibi = v["sahip"]
+            durums = tostring(v["durum"])
+        end
+    end
+    if tostring(durum) == "Kiralık" then
+        dbExec(db,"UPDATE veriler SET durum = ? WHERE id = ?","Faaliyette",id)
+        outputChatBox("#ff7f00● #ffffffBaşarıyla Kiralıktan çıkardınız!",source,255,255,255,true)
+        outputChatBox("#ff7f00● #ffffffİşyeri Durumu: #ff7f00"..tostring(durum),source,255,255,255,true)
+    else
+        if tonumber(miktar) >= 100 then
+            if tostring(sahibi) == tostring(getAccountName(getPlayerAccount(source))) then
+                dbExec(db,"UPDATE veriler SET durum = ?, fiyati = ? WHERE id = ?","Kiralık",tostring(miktar),id)
+                outputChatBox("#ff7f00● #ffffffBaşarıyla Satışa çıkardınız!",source,255,255,255,true)
+                outputChatBox("#ff7f00● #ffffffİşyeri Durumu: #ff7f00 Kiralık",source,255,255,255,true)
+                outputChatBox("#ff7f00● #ffffffİşyeri Kiralama Fiyatı: #ff7f00"..tostring(miktar),source,255,255,255,true)
+                triggerClientEvent(source,"WorkPlaceSystem:PaneliKapat2",source)
+            else
+                outputChatBox("#FF0000[BİLGİLENDİRME] #ffffffKiralığa Çıkarma başarısız. Sadece işyeri sahibi kiralığa çıkarabilir.",source,255,255,255,true)
+            end
+        else
+            outputChatBox("#FF0000[BİLGİLENDİRME] #ffffffKiralığa Çıkarma başarısız. En az 100 birime satabilirsiniz.",source,255,255,255,true)
+        end
+    end
+end)
