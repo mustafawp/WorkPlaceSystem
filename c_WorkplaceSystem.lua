@@ -259,6 +259,23 @@ addEventHandler("onDgsMouseClickUp",getRootElement(),function()
         local sa = dgsGetText(girisnotbiraktxt)
         triggerServerEvent("WorkPlaceSystem:NotBirak",localPlayer,id,sa)
     end
+    if source == yonetimkilitbtn then
+        local text = dgsGetText(yonetimkilitbtn)
+        local yapilcak
+        if text == "Kilit: Kilitsiz" then
+            yapilcak = 0
+            outputChatBox("#ffffffBaşarıyla #ff7f00işyerinin kilitlendi.",255,255,255,true)
+            dgsSetText(yonetimkilitbtn,"Kilit: Kilitli")
+        else
+            yapilcak = 1
+            outputChatBox("#ffffffBaşarıyla #ff7f00işyerinin kilidi açıldı.",255,255,255,true)
+            dgsSetText(yonetimkilitbtn,"Kilit: Kilitsiz")
+        end
+        triggerServerEvent("WorkPlaceSystem:KilitGuncelle",localPlayer,id,yapilcak)
+    end
+    if source == yonetimgirisbtn then
+        triggerServerEvent("WorkPlaceSystem:LoginMyWorkPlace",localPlayer,id)
+    end
 end)
 
 addEvent("WorkPlaceSystem:AdminPanel",true)
@@ -295,6 +312,11 @@ addEventHandler("WorkPlaceSystem:GirisEkrani",getRootElement(),function(veriler)
         dgsSetText(girisfiyatlbl,"➥ İşyeri Fiyatı: "..tostring(v["fiyati"]))
         dgsSetText(giriscalismasaatlerilbl,"➥ Çalışma Saatleri: "..tostring(v["saat"]))
         id = tonumber(v["id"])
+        if v["kilit"] == 0 then
+        dgsSetText(yonetimkilitbtn,"Kilit: Kilitli")
+        else
+            dgsSetText(yonetimkilitbtn,"Kilit: Kilitsiz")
+        end
         dgsSetVisible(giriswindow,true)
         showCursor(true)
     end
@@ -320,6 +342,12 @@ end)
 addEvent("WorkPlaceSystem:PaneliKapat",true)
 addEventHandler("WorkPlaceSystem:PaneliKapat",getRootElement(),function()
     dgsSetVisible(giriswindow,false)
+    showCursor(false)
+end)
+
+addEvent("WorkPlaceSystem:PaneliKapat2",true)
+addEventHandler("WorkPlaceSystem:PaneliKapat2",getRootElement(),function()
+    dgsSetVisible(yonetimwindow,false)
     showCursor(false)
 end)
 

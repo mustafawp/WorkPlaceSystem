@@ -406,3 +406,86 @@ addEventHandler("WorkPlaceSystem:NotBirak",getRootElement(),function(id,mesaj)
         end
 end)
 
+addEvent("WorkPlaceSystem:KilitGuncelle",true)
+addEventHandler("WorkPlaceSystem:KilitGuncelle",getRootElement(),function(id,durum)
+    if tonumber(durum) == 0 then
+    dbExec(db,"UPDATE veriler SET kilit = ? WHERE id = ?","Kilitli",id)
+    else
+        dbExec(db,"UPDATE veriler SET kilit = ? WHERE id = ?","Kilitsiz",id)
+    end
+end)
+
+addEvent("WorkPlaceSystem:LoginMyWorkPlace",true)
+addEventHandler("WorkPlaceSystem:LoginMyWorkPlace",getRootElement(),function(id)
+    local veriler = dbPoll(dbQuery(db,"SELECT * FROM veriler"),-1)
+    for i,v in pairs(veriler) do
+        if tostring(v["id"]) == tostring(id) then
+            turua = v["turu"]
+        end
+    end
+    setElementFrozen(source,false)
+    fadeCamera(source,false)
+    toggleAllControls(source,false)
+    local hesapas = getPlayerAccount(source)
+    triggerClientEvent(source,"WorkPlaceSystem:PaneliKapat2",source)
+    for i,v in pairs(girismarkerlari) do
+        if tostring(v[1]) == tostring(id) then
+            markervarmi = true
+        end
+    end
+    if markervarmi ~= true then
+        px,py,pz = getElementPosition(source)
+        if turua == "Market" then
+            local markersasd = createMarker ( interiors[1][1], interiors[1][2], interiors[1][3]+1, "arrow", 1.2, 255, 127, 0, 170 )
+            addEventHandler("onMarkerHit",markersasd,isyerindencikis)
+            setElementInterior( markersasd, interiors[1][4])
+            setElementDimension(markersasd,tonumber(id))
+            table.insert( girismarkerlari,{id,markersasd})
+          elseif turua == "Giyim" then
+            local markersasd = createMarker ( interiors[2][1], interiors[2][2], interiors[2][3]+1, "arrow", 1.2, 255, 127, 0, 170 )
+            addEventHandler("onMarkerHit",markersasd,isyerindencikis)
+            setElementInterior( markersasd, interiors[2][4])
+            setElementDimension(markersasd,tonumber(id))
+            table.insert( girismarkerlari,{id,markersasd})
+          elseif turua == "Kurum" then
+            local markersasd = createMarker ( interiors[3][1], interiors[3][2], interiors[3][3]+1, "arrow", 1.2, 255, 127, 0, 170 )
+            addEventHandler("onMarkerHit",markersasd,isyerindencikis)
+            setElementInterior( markersasd, interiors[3][4])
+            setElementDimension(markersasd,tonumber(id))
+            table.insert( girismarkerlari,{id,markersasd})
+          elseif turua == "Restorant" then
+            local markersasd = createMarker ( interiors[4][1], interiors[4][2], interiors[4][3]+1, "arrow", 1.2, 255, 127, 0, 170 )
+            addEventHandler("onMarkerHit",markersasd,isyerindencikis)
+            setElementInterior( markersasd, interiors[4][4])
+            setElementDimension(markersasd,tonumber(id))
+            table.insert( girismarkerlari,{id,markersasd})
+          elseif turua == "Şirket" then
+            local markersasd = createMarker ( interiors[5][1], interiors[5][2], interiors[5][3]+1, "arrow", 1.2, 255, 127, 0, 170 )
+            addEventHandler("onMarkerHit",markersasd,isyerindencikis)
+            setElementInterior( markersasd, interiors[5][4])
+            setElementDimension(markersasd,tonumber(id))
+            table.insert( girismarkerlari,{id,markersasd})
+          end
+    end
+    setAccountData(hesapas,"WorkPlaceSystem:Giris","true")
+    setTimer( function( player )
+        if getPedOccupiedVehicle( player ) then removePedFromVehicle( player ) end
+        if turua == "Market" then
+          setElementInterior( player, interiors[1][4], interiors[1][1], interiors[1][2], interiors[1][3])
+        elseif turua == "Giyim" then
+          setElementInterior( player, interiors[2][4], interiors[2][1], interiors[2][2], interiors[2][3])
+        elseif turua == "Kurum" then
+          setElementInterior( player, interiors[3][4], interiors[3][1], interiors[3][2], interiors[3][3])
+        elseif turua == "Restorant" then
+          setElementInterior( player, interiors[4][4], interiors[4][1], interiors[4][2], interiors[4][3])
+        elseif turua == "Şirket" then
+          setElementInterior( player, interiors[5][4], interiors[5][1], interiors[5][2], interiors[5][3])
+        end
+          setElementDimension(player, tonumber(id))
+          toggleAllControls( player, true );
+          fadeCamera( player, true );
+      end, 1200, 1, client, t );
+      setTimer(function(player)
+        setAccountData(hesapas,"WorkPlaceSystem:Giris","false")
+    end,2000,1,client,t)
+end)
