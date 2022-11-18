@@ -175,10 +175,28 @@ addEventHandler("WorkPlaceSystem:LoginToWorkPlace",getRootElement(),function(id)
     end
     if sahibimi == true then
         local durum = "sahibi"
+        for i,v in pairs(markerlar) do
+            if tostring(v[2]) == tostring(id) then
+                if getElementData(v[1],"WorkPlaceSystem:NotuVarmi") == true then
+                    local notus = getElementData(v[1],"WorkPlaceSystem:Notu")
+                    outputChatBox("#ffffffBirisi işyerinizin önüne not bırakmış. Not: #ff7f00"..tostring(notus),source,255,255,255,true)
+                    setElementData(v[1],"WorkPlaceSystem:NotuVarmi",false)
+                end
+            end
+        end
         triggerClientEvent(source,"WorkPlaceSystem:PaneliKapat",source)
         triggerClientEvent(source,"WorkPlaceSystem:Owner",source,durum)
     elseif kiracimi == true then
         local durum = "kiracı"
+        for i,v in pairs(markerlar) do
+            if tostring(v[2]) == tostring(id) then
+                if getElementData(v[1],"WorkPlaceSystem:NotuVarmi") == true then
+                    local notus = getElementData(v[1],"WorkPlaceSystem:Notu")
+                    outputChatBox("#ffffffBirisi işyerinizin önüne not bırakmış. Not: #ff7f00"..tostring(notus),source,255,255,255,true)
+                    setElementData(v[1],"WorkPlaceSystem:NotuVarmi",false)
+                end
+            end
+        end
         triggerClientEvent(source,"WorkPlaceSystem:PaneliKapat",source)
         triggerClientEvent(source,"WorkPlaceSystem:Owner",source,durum)
     else
@@ -369,5 +387,22 @@ end)
 
 addEvent("WorkPlaceSystem:NotBirak",true)
 addEventHandler("WorkPlaceSystem:NotBirak",getRootElement(),function(id,mesaj)
-    
+        if #mesaj >= 5 then
+            for i,v in pairs(markerlar) do
+                if tostring(v[2]) == tostring(id) then
+                    if getElementData(v[1],"WorkPlaceSystem:NotuVarmi") == false then
+                        local hesap = string.gsub(getPlayerName(source), "#%x%x%x%x%x%x", "")
+                        setElementData(v[1],"WorkPlaceSystem:NotuVarmi",true)
+                        setElementData(v[1],"WorkPlaceSystem:Notu",mesaj)
+                        outputChatBox("#ff7f00● #ffffffBaşarıyla Not bıraktınız!",source,255,255,255,true)
+                        outputChatBox("#ff7f00● #ffffffNotunuz: #ff7f00"..tostring(mesaj),source,255,255,255,true)
+                    else
+                        outputChatBox("#FF0000[BİLGİLENDİRME] #ffffffNot Bırakma Başarısız. Zaten başka birisi not bırakmış.",source,255,255,255,true)
+                    end
+                end
+            end
+        else
+            outputChatBox("#FF0000[BİLGİLENDİRME] #ffffffNot Bırakma Başarısız. Not en az 5 karakter olmalıdır.",source,255,255,255,true)
+        end
 end)
+
