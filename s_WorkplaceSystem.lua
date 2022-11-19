@@ -570,3 +570,11 @@ addEventHandler("WorkPlaceSystem:KiraligaCikar",getRootElement(),function(id,mik
         end
     end
 end)
+
+addEvent("WorkPlaceSystem:CalismaSaatiniGuncelle",true)
+addEventHandler("WorkPlaceSystem:CalismaSaatiniGuncelle",getRootElement(),function(id,text)
+    dbExec(db,"UPDATE veriler SET saat = ? WHERE id = ?",tostring(text),id)
+    outputChatBox("#ff7f00● #ffffffBaşarıyla Çalışma Saatlerini güncellediniz!",source,255,255,255,true)
+    outputChatBox("#ff7f00● #ffffffİşyeri Çalışma Saatleri: #ff7f00"..tostring(text),source,255,255,255,true)
+    triggerClientEvent(source,"WorkPlaceSystem:PaneliKapat2",source)
+end)

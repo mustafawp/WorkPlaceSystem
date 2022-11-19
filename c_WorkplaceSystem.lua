@@ -294,6 +294,22 @@ addEventHandler("onDgsMouseClickUp",getRootElement(),function()
         end
         triggerServerEvent("WorkPlaceSystem:KiraligaCikar",localPlayer,id,miktar)
     end
+    if source == yonetimcalismasaatibtn then
+        local text = dgsGetText(yonetimsaatunvantxt)
+        if text == "7/24" then
+
+        else
+            if #text == 11 then
+                if string.find(tostring(text),":") and string.find(tostring(text),"-") then
+                    triggerServerEvent("WorkPlaceSystem:CalismaSaatiniGuncelle",localPlayer,id,text)
+                else
+                    outputChatBox("#FFFFFFÇalışma saati ÖRNEK #ff0000'07:30-21:30' #ffffffgibi olması veya #ff0000'7/24' #ffffffolması gerekmektedir.",255,255,255,true)
+                end
+            else
+                outputChatBox("#FFFFFFÇalışma saati ÖRNEK #ff0000'07:30-21:30' #ffffffgibi olması veya #ff0000'7/24' #ffffffolması gerekmektedir.",255,255,255,true)
+            end
+        end
+    end
 end)
 
 addEvent("WorkPlaceSystem:AdminPanel",true)
